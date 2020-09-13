@@ -1,0 +1,131 @@
+{% extends "index.html" %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% block stylesheet %}{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block page %}
+    <!-- Header -->
+    {% include "includes/blogheader.html"%}
+    <!-- End block Header -->
+        <div class="w3-container w3-margin-bottom">
+
+            <h1>{{ post.title }}</h1>
+            <p>Published {{ post.publish }} by {{ post.author }}</p>
+            {% for item in images %}
+                {% if item.image %}
+                    <img src="{{ item.thumb.url }}" alt="{{ item.caption }}" class="w3-hover-opacity">
+                {% else %}
+                    <p></p>
+                {% endif %}
+            {% endfor %}
+            {{ post.body|safe }}
+
+            <div class="w3-container w3-margin-bottom">
+                <h3><b>Related Articles</b></h3>
+                {% for post in similar_posts %}
+                <p><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></p>
+                <div class="w3-third w3-container w3-margin-bottom">
+                    {% if post.image %}
+                        <a href="{{ post.get_absolute_url }}">
+                            <img src="{{ post.thumb.url }}" alt="{{ post.title }}" style="width:100%" class="w3-hover-opacity">
+                        </a>
+                    {% else %}
+                    <p></p>
+                    {% endif %}
+                    <div class="w3-container w3-white">
+                        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+                        <p>|&nbsp;Tags:
+                        {% for tag in post.tags.all %}
+                           <a href="{% url 'post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                            {% if not forloop.last %}, {% endif %}
+                        {% endfor %}</p>
+                        <p>Published {{ post.publish }} by {{ post.author }}</p>
+                        {{ post.body|safe|truncatewords_html:30 }}
+                    </div>
+                </div>
+                {% empty %}
+                    There are no similar posts yet.
+                {% endfor %}
+            </div>
+
+            {% with comments.count as total_comments %}
+            <h3><b>{{ total_comments }} Comment{{ total_comments|pluralize }}</b></h3>
+            {% endwith %}
+
+
+
+            <div class="w3-container w3-padding-large w3-grey">
+                <h4 id="contact"><b>Your Comment</b></h4>
+                <hr class="w3-opacity">
+                <div class="container">
+                    <form method="POST" action=".">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}
+                        <br>
+                        <button type="submit" value='Post comment' class="w3-button w3-black w3-margin-bottom">
+                            <i class="fa fa-paper-plane w3-margin-right"></i>Post Comment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <hr/>
+
+            {% for comment in comments %}
+            <blockquote>
+                <p><b>{{ comment.user }}</b> | {{ comment.timestamp|timesince }} ago</p>
+                <p>{{ comment.content|safe|linebreaks }}</p>
+                <footer>
+                    {% if comment.children.count > 0 %}
+                    {{ comment.children.count }} Comment{% if comment.children.count > 1 %}s{% endif %} |
+                    {% endif %}
+                    <button class="w3-button w3-black w3-margin-bottom" onclick="openForm()">
+                        Reply
+                    </button>
+                </footer>
+
+                    {% for child_comment in comment.children %}
+                        <blockquote>
+                            <p><b>{{ child_comment.user }}</b> | {{ child_comment.timestamp|timesince }} ago</p>
+                            <p>{{ child_comment.content | safe | linebreaks }}</p>
+                        </blockquote>
+
+                    {% endfor %}
+
+                    {% if request.user.is_authenticated %}
+                        <div id="myForm"  class="w3-container w3-padding-large w3-grey" style="display: none;">
+                            <h4 id="contact"><b>Leave a Reply</b></h4>
+                            <hr class="w3-opacity">
+                            <div class="container">
+                                <form method="POST" action=".">
+                                    {% csrf_token %}
+                                    {{ comment_form|crispy }}
+                                    <br>
+                                    <input type='hidden' name='parent_id' value='{{ comment.id }}'>
+                                    <button type="submit" class="w3-button w3-black w3-margin-bottom">
+                                        <i class="fa fa-paper-plane w3-margin-right"></i>Reply
+                                    </button>
+                                    <button type="button" class="w3-button w3-black w3-margin-bottom" onclick="closeForm()">
+                                        Close Form
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Please <a href="{% url 'login' %}">Log in</a> or <a href="{% url 'register' %}">Sign up</a> to add a new comment</p>
+                    {% endif %}
+
+            </blockquote>
+            {% endfor %}
+
+<!-- Footer -->
+{% include "includes/footer.html "%}
+<!-- End page content -->
+
+{% endblock page %}
+
+
+

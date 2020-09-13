@@ -1,0 +1,41 @@
+{% load blog_tags %}
+
+<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar">
+<a href="#" onclick="w3_close()" class="w3-hide-large w3-right w3-jumbo w3-padding w3-hover-grey" title="close menu">
+      <i class="fa fa-remove"></i></a>
+
+<div class="w3-container w3-white">
+    <h3 class="w3-text-grey w3-padding-16">TAGS</h3>
+     <p>
+        {% for tag in tags %}
+          <span class="w3-tag w3-grey w3-small w3-margin-bottom">
+              <a href="{% url 'post_list_by_tag' tag.slug %}" style="text-decoration:none; color: white">
+                {{ tag.name }}
+              </a>
+          </span>
+        {% endfor %}
+      </p>
+</div>
+
+<div class="w3-container w3-white">
+  <h3 class="w3-text-grey w3-padding-16">LATEST POSTS</h3>
+  {% show_latest_posts 10 %}
+</div>
+
+  <div class="w3-container w3-white">
+    <h3 class="w3-text-grey w3-padding-16">MOST COMMENTED POSTS</h3>
+    {% get_most_commented_posts as most_commented_posts %}
+      <ul class="w3-ul w3-hoverable">
+        {% for post in most_commented_posts %}
+        <li class="w3-padding-16">
+            <span class="w3-large">
+              <a href="{{ post.get_absolute_url }}" style="text-decoration: none;">
+                {{ post.title }}
+              </a>
+            </span>
+        </li>
+        {% endfor %}
+      </ul>
+  </div>
+
+</nav>

@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+{% load static %}
+{% load blog_tags %}
+<!--{% load crispy_forms_tags %}-->
+{% block title %}Blog{% endblock %}
+
+{% block page %}
+<!-- Header -->
+{% include "includes/blogheader.html" %}
+
+<div class="w3-row-padding">
+    {% if tag %}
+       <h2>Posts tagged with "{{ tag }}"</h2>
+    {% endif %}
+    {% if query %}
+        <h2>Posts containing "{{ request.GET.query }}"</h2>
+    {% endif %}
+    {% for post in posts %}
+     <div class="w3-third w3-container w3-margin-bottom">
+        {% if post.image %}
+            <a href="{{ post.get_absolute_url }}">
+                <img src="{{ post.thumb.url }}" alt="{{ post.title }}" style="width:100%" class="w3-hover-opacity">
+            </a>
+        {% else %}
+            <p></p>
+        {% endif %}
+        <div class="w3-container w3-white">
+            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+            <p>|&nbsp;Tags:
+            {% for tag in post.tags.all %}
+               <a href="{% url 'post_list_by_tag' tag.slug %}">{{ tag.name }}</a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}</p>
+                <p>Published {{ post.publish }} by {{ post.author }}</p>
+            {{ post.body|safe|truncatewords_html:30 }}
+        </div>
+     </div>
+     {% empty %}
+        <p>There are no results for your query.</p>
+     {% endfor %}
+</div>
+<!-- Pagination -->
+{% include "includes/pagination.html" with page=posts %}
+<!-- Footer -->
+{% include "includes/footer.html" %}
+<!-- End page content -->
+{% endblock page %}

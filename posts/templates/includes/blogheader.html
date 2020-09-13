@@ -1,0 +1,37 @@
+{% load static %}
+<header id="portfolio">
+    <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
+    <div class="w3-container">
+        {% if user.is_authenticated %}
+        <h1><b>Blog</b></h1>
+        <h3>Hello, {{ user.email }}</h3>
+        <h4><strong>Total users registered: </strong> {{ count }}</h4>
+        {% else %}
+        <h1><b>Blog</b></h1>
+        {% endif %}
+        <div class="w3-section w3-bottombar w3-padding-16 topnav">
+            <span class="w3-margin-right">Tags:</span>
+            <button class="w3-button w3-black "><a href="{% url 'post_list' %}" style="text-decoration: none; color: white">ALL</a></button>
+            {% for tag in common_tags %}
+                <button class="w3-button w3-white "><a href="{% url 'post_list_by_tag' tag.slug %}" style="text-decoration: none; color:black">{{ tag }}</a></button>
+            {% endfor %}
+
+            {% if user.is_authenticated %}
+                <button class="w3-button w3-white w3-right"><a href="{% url 'account_change_password' %}" style="text-decoration: none;">Change password</a></button>
+                <button class="w3-button w3-green w3-right"><a href='{% url "account_logout" %}' style="text-decoration: none;">Logout</a></button>
+            {% else %}
+                <button class="w3-button w3-white w3-right"><a href="{% url 'magicauth-login' %}" style="text-decoration: none;">Magic Link</a></button>
+                <button class="w3-button w3-white w3-right"><a href="{% url 'account_login' %}" style="text-decoration: none;">Login</a></button>
+                <button class="w3-button w3-green w3-right"><a href="{% url 'account_signup' %}" style="text-decoration: none;">Sign up</a></button>
+            {% endif %}
+
+            <div class="search-container">
+                <form method="get" action="{% url 'search_results' %}">
+                    <input name="q" type="text" placeholder="Search" aria-label="Search">
+                    <button type="submit" value="Search"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</header>

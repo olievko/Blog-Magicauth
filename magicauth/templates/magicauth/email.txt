@@ -1,0 +1,9 @@
+Hello {{ user.first_name }} {{ user.last_name }},
+
+To have access to {{ site.domain }}, you have to click on this connection link: https://{{ site.domain }}{% url 'magicauth-validate-token' token.key %}
+
+This link is only valid for {{ TOKEN_DURATION_MINUTES }} minutes. It's for single use only.
+
+Have a good day,
+
+The team of {{ site.domain }}

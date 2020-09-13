@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% load static %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+{% block title %}Sign Up{% endblock %}
+{% load crispy_forms_tags %}
+{% block body %}
+<form class="modal-content" action="{% url 'account_signup' %}" method="post">
+	<div class="container">
+		<h1>Sign Up</h1>
+		<p>Please, use the following form to sign up:</p>
+		<hr>
+			{% csrf_token %}
+			{{ form|crispy }}
+		<button type="submit">Create my account</button>
+		<p>Already have an account? <a href="{% url 'account_login' %}">Sign in</a></p>
+	</div>
+</form>
+{% endblock body %}

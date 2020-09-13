@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load static %}
+{% block stylesheet %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+{% block title %}Authentication{% endblock %}
+{% block body %}
+
+<form class="modal-content animate" action='.' method='POST'>
+<div class="container">
+<h1 class='w3-center'>Login Form</h1>
+    {% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Login</button>
+
+	 <div class="container" style="background-color:#f1f1f1">
+		 <button type="button" class="cancelbtn"><a href="/">Cancel</a></button>
+         <button type="button" class="cancelbtn w3-black"><a href="{% url 'magicauth-login' %}">Magic Link</a></button>
+         <span class="psw"><a href="{% url 'account_signup' %}">Sign up?</a> or
+         Forgot <a href="{% url 'account_reset_password' %}">password?</a></span>
+    </div>
+</div>
+</form>
+{% endblock body %}

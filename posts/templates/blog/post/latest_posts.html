@@ -1,0 +1,12 @@
+
+<ul class="w3-ul w3-hoverable">
+{% for post in latest_posts %}
+  <li class="w3-padding-16">
+    <span class="w3-large">
+      <a href="{{ post.get_absolute_url }}" style="text-decoration: none;">
+        {{ post.title }}
+      </a>
+    </span>
+  </li>
+{% endfor %}
+</ul>
