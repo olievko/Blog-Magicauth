@@ -38,7 +38,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 MAGICAUTH_FROM_EMAIL = DEFAULT_FROM_EMAIL
 MAGICAUTH_TOKEN_DURATION = 15 * 60
 
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ") if os.environ.get('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ") if os.environ.get('ALLOWED_HOSTS') else ['localhost', '127.0.0.1', 'blog-magicauth.herokuapp.com']
 
 
 # Application definition
