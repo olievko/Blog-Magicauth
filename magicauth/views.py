@@ -24,7 +24,7 @@ class MagicLinkView(generic.FormView):
 
 
 class ValidateTokenView(generic.RedirectView):
-    url = reverse_lazy('post-list')
+    url = reverse_lazy('post_list')
 
     def get_valid_token(self, key):
         token = get_object_or_404(MagicToken, key=key)
