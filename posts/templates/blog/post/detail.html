@@ -3,7 +3,7 @@
 {% load blog_tags %}
 
 {% block title %}{{ post.title }}{% endblock %}
-{% block stylesheet %}{% endblock %}
+
 {% load crispy_forms_tags %}
 
 {% block page %}
@@ -122,7 +122,7 @@
             {% endfor %}
 
 <!-- Footer -->
-{% include "includes/footer.html "%}
+{% include "includes/footer.html" %}
 <!-- End page content -->
 
 {% endblock page %}
